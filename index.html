@@ -130,6 +130,35 @@ form select {
   transition: border .2s ease, background .2s ease;
 }
 
+/* Specific styling for date input on mobile */
+input[type="date"] {
+  position: relative;
+  min-height: 44px;
+}
+
+/* Better mobile date input appearance */
+input[type="date"]::-webkit-calendar-picker-indicator {
+  opacity: 1;
+  cursor: pointer;
+  padding-left: 8px;
+}
+
+/* Ensure date input shows something on mobile before selection */
+input[type="date"]:invalid::-webkit-datetime-edit {
+  color: var(--muted);
+}
+
+input[type="date"]::before {
+  content: attr(placeholder);
+  color: var(--muted);
+  margin-right: 8px;
+}
+
+input[type="date"]:focus::before,
+input[type="date"]:valid::before {
+  content: "";
+}
+
 /* Make all inputs full width on mobile */
 @media (max-width: 640px) {
   form input,
@@ -466,7 +495,7 @@ footer .heart:hover {
     <input id="title" placeholder="Track Title" required />
     <input id="artist" placeholder="Name Of Artist" required />
     <input id="platform" placeholder="Platform" required />
-    <input type="date" id="date" required />
+    <input type="date" id="date" placeholder="Release Date" required />
     <select id="status">
       <option>Submitted</option>
       <option>Live</option>
@@ -806,9 +835,9 @@ function render(){
     const idElement = card.querySelector('.release-id');
     idElement.onclick = () => {
       navigator.clipboard.writeText(r.id).then(() => {
-        showToast(' ID copied to clipboard!');
+        showToast('📋 ID copied to clipboard!');
       }).catch(() => {
-        showToast(' Could&#39;t copy ID');
+        showToast('❌ Could not copy ID');
       });
     };
     
@@ -875,7 +904,7 @@ function render(){
         
         // Check if editing would create a duplicate with OTHER releases
         if(isDuplicate(newTitle, newArtist, newPlatform, r)){
-          showToast('Oops Cannot save - this would create a duplicate!');
+          showToast('⚠️ Oops Cannot save - this would create a duplicate!');
           // Keep edit mode open so user can fix it
           return;
         }
@@ -924,7 +953,7 @@ form.onsubmit=e=>{
     status:form.status.value
   };
   if(isDuplicate(newRelease.title, newRelease.artist, newRelease.platform)){
-    showToast('Duplicated release not added!');
+    showToast('⚠️ Duplicated release not added!');
     return;
   }
   releases.push(newRelease);
@@ -932,7 +961,7 @@ form.onsubmit=e=>{
   render();
   form.reset();
   duplicateWarning.style.display='none';
-  showToast(`"${newRelease.title}" added`);
+  showToast(`✅ "${newRelease.title}" added`);
 };
 
 // Filters
@@ -1037,13 +1066,13 @@ csvFileInput.onchange=(e)=>{
     
     // Show detailed feedback
     if(importedCount>0 && skippedCount>0){
-      showToast(` Imported! ${importedCount} release(s), skipped ${skippedCount} duplicate(s)`);
+      showToast(`✅ Imported! ${importedCount} release(s), skipped ${skippedCount} duplicate(s)`);
     }else if(importedCount>0){
-      showToast(` Imported! ${importedCount} release(s)`);
+      showToast(`✅ Imported! ${importedCount} release(s)`);
     }else if(skippedCount>0){
-      showToast(`All ${skippedCount} release(s) were duplicates: Nothing imported`);
+      showToast(`⚠️ All ${skippedCount} release(s) were duplicates: Nothing imported`);
     }else{
-      showToast('No releases found in CSV');
+      showToast('❌ No releases found in CSV');
     }
   };
   reader.readAsText(file);
