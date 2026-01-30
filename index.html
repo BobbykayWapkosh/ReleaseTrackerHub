@@ -55,26 +55,39 @@ header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 16px;
+}
+.header-inner h1 {
+  margin: 0;
+  font-size: 1.5rem;
+  flex-shrink: 1;
+}
+/* Make the header behave nicely on phones & tablets */
+@media (max-width: 640px) {
+  .header-inner {
+    padding: 12px 16px;
+    gap: 12px;
+  }
+  .header-inner h1 {
+    font-size: 1.1rem;
+  }
 }
 .wrap { max-width: 900px; margin: auto; padding: 16px; }
 
-/* Make the header behave nicely on phones & tablets */
-@media (max-width: 480px) {
-  .header-inner {
-    flex-wrap: wrap;
-    gap: 8px;
-  }
-
-  .header-inner h1 {
-    font-size: 1.5rem;
-    margin-right: 0;
-  }
-
-  .dark-toggle {
-    font-size: 0.9rem;
-  }
+.beta-badge {
+  font-size: 0.6rem;
+  background: #f59e0b;
+  color: #111;
+  padding: 2px 6px;
+  border-radius: 6px;
+  margin-left: 6px;
+  vertical-align: middle;
+  font-weight: 700;
 }
-
+body.dark .beta-badge {
+  background: #fbbf24;
+  color: #000;
+}
 
 /* All the clickable buttons */
 button {
@@ -87,11 +100,27 @@ button {
   transition: transform .2s ease, opacity .2s ease;
 }
 button:hover { opacity: .85; transform: translateY(-1px); }
-.dark-toggle { background: transparent; border: 1px solid var(--border); color: var(--text); }
+.dark-toggle { 
+  background: transparent; 
+  border: 1px solid var(--border); 
+  color: var(--text);
+  flex-shrink: 0;
+}
 
-/* Forms Inputs */
-form { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 24px; position: relative; }
-input, select {
+/* Forms - Using Flexbox for better responsiveness */
+form { 
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 24px;
+  position: relative;
+}
+
+/* Form inputs take 50% width on desktop, 100% on mobile */
+form input,
+form select {
+  flex: 1 1 calc(50% - 6px);
+  min-width: 200px;
   padding: 10px 12px;
   border-radius: 8px;
   border: 1px solid var(--border);
@@ -99,11 +128,33 @@ input, select {
   color: var(--text);
   transition: border .2s ease, background .2s ease;
 }
-input:focus, select:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(34,197,94,0.2); }
 
-/* Duplicate Relase Warning */
+/* Make all inputs full width on mobile */
+@media (max-width: 640px) {
+  form input,
+  form select {
+    flex: 1 1 100%;
+    min-width: 100%;
+  }
+}
+
+/* Submit button always takes full width */
+form button[type="submit"],
+form button:not([type]) {
+  flex: 1 1 100%;
+  width: 100%;
+}
+
+input:focus, select:focus { 
+  outline: none; 
+  border-color: var(--accent); 
+  box-shadow: 0 0 0 3px rgba(34,197,94,0.2); 
+}
+
+/* Duplicate Release Warning */
 .duplicate-warning {
-  grid-column: 1 / -1;
+  flex: 1 1 100%;
+  width: 100%;
   background: #fef3c7;
   color: #92400e;
   padding: 10px 12px;
@@ -125,12 +176,14 @@ body.dark .duplicate-warning {
 
 /* Stats */
 .stats {
-  display: grid;
-  grid-template-columns: repeat(auto-fit,minmax(140px,1fr));
+  display: flex;
+  flex-wrap: wrap;
   gap: 12px;
   margin-bottom: 16px;
 }
 .stats div {
+  flex: 1 1 calc(20% - 12px);
+  min-width: 120px;
   background: var(--soft);
   padding: 10px;
   border-radius: 10px;
@@ -138,8 +191,27 @@ body.dark .duplicate-warning {
 }
 .stats div:hover { transform: translateY(-2px); box-shadow: 0 8px 20px var(--shadow); }
 
+@media (max-width: 640px) {
+  .stats div {
+    flex: 1 1 calc(50% - 6px);
+  }
+}
+
 /* CSV Buttons */
-.csv-buttons { display: flex; gap: 8px; margin-bottom: 16px; }
+.csv-buttons { 
+  display: flex; 
+  flex-wrap: wrap;
+  gap: 8px; 
+  margin-bottom: 16px; 
+}
+.csv-buttons button {
+  flex: 1 1 auto;
+}
+@media (max-width: 640px) {
+  .csv-buttons button {
+    flex: 1 1 100%;
+  }
+}
 
 /* Visual Progress Bar */
 .progress-wrap { margin-bottom: 20px; }
@@ -155,16 +227,53 @@ body.dark .duplicate-warning {
   flex-wrap: wrap;
   align-items: center;
 }
-.filters button { background: var(--soft); color: var(--text); transition: transform .2s ease; }
+.filters button { 
+  background: var(--soft); 
+  color: var(--text); 
+  transition: transform .2s ease;
+  flex-shrink: 0;
+}
 .filters button.active { background: var(--accent); color: #fff; }
 .filters button:hover { transform: translateY(-1px); }
-.sort-date-select { padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border); background: var(--soft); color: var(--text); cursor: pointer; }
+.sort-date-select { 
+  padding: 8px 12px; 
+  border-radius: 8px; 
+  border: 1px solid var(--border); 
+  background: var(--soft); 
+  color: var(--text); 
+  cursor: pointer;
+  flex-shrink: 0;
+}
 
 /* Search bar Styling*/
-.search-input { padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border); background: var(--soft); color: var(--text); margin-bottom: 12px; width: 100%; max-width: 300px; }
+.search-input { 
+  padding: 8px 12px; 
+  border-radius: 8px; 
+  border: 1px solid var(--border); 
+  background: var(--soft); 
+  color: var(--text); 
+  margin-bottom: 12px; 
+  width: 100%; 
+  max-width: 300px; 
+}
+@media (max-width: 640px) {
+  .search-input {
+    max-width: 100%;
+  }
+}
 
 /* Grid & Cards Layout */
-.grid { display: grid; grid-template-columns: repeat(auto-fill,minmax(250px,1fr)); gap: 16px; }
+.grid { 
+  display: grid; 
+  grid-template-columns: repeat(auto-fill,minmax(250px,1fr)); 
+  gap: 16px; 
+}
+@media (max-width: 640px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 @keyframes fadeInUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 .card {
   background: var(--card);
@@ -209,6 +318,7 @@ body.dark .card.tomorrow {
   user-select: all;
   cursor: pointer;
   transition: opacity 0.2s ease;
+  word-break: break-all;
 }
 .release-id:hover {
   opacity: 1;
@@ -225,6 +335,14 @@ body.dark .card.tomorrow {
 .status.Rejected { background: #ef4444; }
 .status.Delayed { background: #f97316; }
 .card button { margin-top: 8px; font-size: .85rem; }
+.card > div {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.card > div button {
+  flex: 1 1 auto;
+}
 .edit-btn { background: #3b82f6; }
 .delete-btn { background: #ef4444; }
 .cancel-btn { background: #6b7280; }
@@ -248,6 +366,20 @@ footer .heart:hover {
   color: #f87171; 
 }
 
+/* Empty state */
+.empty-state { 
+  text-align: center; 
+  color: var(--muted); 
+  grid-column: 1/-1; 
+  font-size: 1rem; 
+  padding: 40px 20px;
+}
+.empty-state button { 
+  margin-top: 8px; 
+  background: var(--accent); 
+  color: #fff; 
+}
+
 /* Toasts (Popup notifications) */
 .toast-container {
   position: fixed;
@@ -257,6 +389,12 @@ footer .heart:hover {
   flex-direction: column-reverse;
   gap: 8px;
   z-index: 9999;
+}
+@media (max-width: 640px) {
+  .toast-container {
+    left: 20px;
+    right: 20px;
+  }
 }
 .toast {
   background: var(--accent);
@@ -309,7 +447,10 @@ footer .heart:hover {
 <body>
 <header>
   <div class="header-inner">
-    <h1>ReleaseTrackerHub</h1>
+    <h1>
+  ReleaseTrackerHub
+  <span class="beta-badge">BETA</span>
+</h1>
     <button id="themeToggle" class="dark-toggle">🌑 Dark</button>
   </div>
 </header>
@@ -328,7 +469,7 @@ footer .heart:hover {
       <option>Rejected</option>
       <option>Delayed</option>
     </select>
-    <button>Add Release</button>
+    <button type="submit">Add Release</button>
   </form>
 
   <div class="stats" id="statsBar"></div>
@@ -406,7 +547,7 @@ let deletedReleases=[];
 let currentFilter='All';
 let currentSearch='';
 
-// Check existing releases then assign IDs if they’re missing
+// Check existing releases then assign IDs if they're missing
 let needsMigration = false;
 releases.forEach(release => {
   if (!release.id) {
@@ -661,9 +802,9 @@ function render(){
     const idElement = card.querySelector('.release-id');
     idElement.onclick = () => {
       navigator.clipboard.writeText(r.id).then(() => {
-        showToast(' ID copied to clipboard!');
+        showToast('✅ ID copied to clipboard!');
       }).catch(() => {
-        showToast(' Could&#39;t copy ID');
+        showToast('⚠️ Couldn\'t copy ID');
       });
     };
     
@@ -730,7 +871,7 @@ function render(){
         
         // Check if editing would create a duplicate with OTHER releases
         if(isDuplicate(newTitle, newArtist, newPlatform, r)){
-          showToast('Oops Cannot save - this would create a duplicate!');
+          showToast('⚠️ Oops Cannot save - this would create a duplicate!');
           // Keep edit mode open so user can fix it
           return;
         }
@@ -779,7 +920,7 @@ form.onsubmit=e=>{
     status:form.status.value
   };
   if(isDuplicate(newRelease.title, newRelease.artist, newRelease.platform)){
-    showToast('Duplicated release not added!');
+    showToast('⚠️ Duplicated release not added!');
     return;
   }
   releases.push(newRelease);
@@ -892,13 +1033,13 @@ csvFileInput.onchange=(e)=>{
     
     // Show detailed feedback
     if(importedCount>0 && skippedCount>0){
-      showToast(` Imported! ${importedCount} release(s), skipped ${skippedCount} duplicate(s)`);
+      showToast(`✅ Imported! ${importedCount} release(s), skipped ${skippedCount} duplicate(s)`);
     }else if(importedCount>0){
-      showToast(` Imported! ${importedCount} release(s)`);
+      showToast(`✅ Imported! ${importedCount} release(s)`);
     }else if(skippedCount>0){
-      showToast(`All ${skippedCount} release(s) were duplicates: Nothing imported`);
+      showToast(`⚠️ All ${skippedCount} release(s) were duplicates: Nothing imported`);
     }else{
-      showToast('No releases found in CSV');
+      showToast('⚠️ No releases found in CSV');
     }
   };
   reader.readAsText(file);
