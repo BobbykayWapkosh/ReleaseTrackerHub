@@ -837,7 +837,7 @@ function render(){
       navigator.clipboard.writeText(r.id).then(() => {
         showToast('📋 ID copied to clipboard!');
       }).catch(() => {
-        showToast('❌ Could not copy ID');
+        showToast(' Could not copy ID');
       });
     };
     
@@ -904,7 +904,7 @@ function render(){
         
         // Check if editing would create a duplicate with OTHER releases
         if(isDuplicate(newTitle, newArtist, newPlatform, r)){
-          showToast('⚠️ Oops Cannot save - this would create a duplicate!');
+          showToast(' Oops 😶 Cannot save, this would create a duplicate!');
           // Keep edit mode open so user can fix it
           return;
         }
@@ -953,7 +953,7 @@ form.onsubmit=e=>{
     status:form.status.value
   };
   if(isDuplicate(newRelease.title, newRelease.artist, newRelease.platform)){
-    showToast('⚠️ Duplicated release not added!');
+    showToast(' Duplicated release not added!');
     return;
   }
   releases.push(newRelease);
@@ -1066,13 +1066,13 @@ csvFileInput.onchange=(e)=>{
     
     // Show detailed feedback
     if(importedCount>0 && skippedCount>0){
-      showToast(`✅ Imported! ${importedCount} release(s), skipped ${skippedCount} duplicate(s)`);
+      showToast(` Imported! ${importedCount} release(s), skipped ${skippedCount} duplicate(s)`);
     }else if(importedCount>0){
-      showToast(`✅ Imported! ${importedCount} release(s)`);
+      showToast(` Imported! ${importedCount} release(s)`);
     }else if(skippedCount>0){
-      showToast(`⚠️ All ${skippedCount} release(s) were duplicates: Nothing imported`);
+      showToast(`All ${skippedCount} release(s) were duplicates: Nothing imported`);
     }else{
-      showToast('❌ No releases found in CSV');
+      showToast('No releases found in CSV');
     }
   };
   reader.readAsText(file);
