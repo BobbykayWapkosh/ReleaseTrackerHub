@@ -1,186 +1,135 @@
 # ReleaseTrackerHub
 
-A simple control panel for tracking music releases across platforms — without noise, clutter, or lock-ins.
+**A clean control panel for tracking music releases — without the noise.**
 
-ReleaseTrackerHub helps you keep track of submissions, statuses, and release timelines across Spotify, Apple Music, Audiomack, YouTube, Boomplay, and more — all in one place.
-
-**No accounts. No sign-ups. No tracking. Your data stays on your device.**
+ReleaseTrackerHub helps you manage submissions, statuses, and release timelines across Spotify, Apple Music, Audiomack, YouTube, Boomplay, and more — all in one place. No accounts. No sign-ups. No tracking. Your data stays on your device.
 
 ---
 
-## What is this?
+## What It Is (and Isn't)
 
-ReleaseTrackerHub is a lightweight, privacy-first release tracking tool built for:
+Built for music distributors, A&Rs, PR managers, labels, and artists managing their own releases.
 
-- Music distributors  
-- A&Rs  
-- PR managers  
-- Labels  
-- Artists managing their own releases  
-
-### What it is NOT
-
-- Not a distributor (you still submit via DistroKid, TuneCore, UnitedMasters, etc.)  
-- Not a streaming analytics dashboard  
-- Not a cloud SaaS  
-
-### What it IS
-
-- A release control panel  
-- A submission tracking system  
-- A clear view of your release pipeline  
+| It IS | It is NOT |
+|---|---|
+| A release control panel | A distributor (use DistroKid, TuneCore, etc.) |
+| A submission tracking system | A streaming analytics dashboard |
+| A clear view of your release pipeline | A cloud SaaS |
 
 ---
 
 ## Features
 
-### Core
-
-- Track releases across unlimited platforms  
-- Status flow: Submitted → Live → Rejected → Delayed  
-- Platform analytics with interactive charts  
-- Duplicate prevention (add, edit, import)  
-- Search by title, artist, platform, status, or ID  
-- Date-based highlights (today / tomorrow)  
+### Core Tracking
+- Track releases across unlimited platforms
+- Status flow: **Submitted → Live → Rejected → Delayed**
+- Platform analytics with interactive charts
+- Duplicate prevention on add, edit, and import
+- Search by title, artist, platform, status, or ID
+- Date-based highlights for today and tomorrow
 
 ### Data Management
+- LocalStorage persistence — fast and private
+- CSV import & export with permanent unique release IDs
+- Automatic duplicate skipping on import
+- Undo delete (7-second window)
+- Inline editing with cancel
+- Collapsible notes per release (exports with CSV)
 
-- LocalStorage persistence (fast & private)  
-- CSV import & export  
-- Automatic duplicate skipping  
-- Undo delete (7-second window)  
-- Inline editing with cancel  
-- Permanent unique release IDs  
-
-### User Experience
-
-- Dark / Light mode  
-- Fully responsive  
-- Color-coded platforms  
-- Toast notifications  
-- Click-to-copy release IDs  
+### Experience
+- Dark / Light mode
+- Fully responsive
+- Color-coded platforms
+- Toast notifications
+- Click-to-copy release IDs
+- Keyboard shortcut — press `/` anywhere to jump to the form
 
 ---
 
 ## Getting Started
 
-Open the app link and start adding releases. Everything saves automatically on your device.  
+Open the app and start adding releases. Everything saves automatically to your device.
 
-**No setup. No downloads. No accounts.**
+**No setup. No downloads. No accounts required.**
 
 ### CSV Import & Export
-
-- Exports include permanent release IDs  
-- Imports support old and new CSV formats  
-- Missing IDs are auto-generated  
-- Duplicates are skipped automatically  
+- Exports include permanent release IDs
+- Imports support old and new CSV formats
+- Missing IDs are auto-generated on import
+- Duplicates are skipped automatically with a summary (e.g. *"Imported 5, skipped 2 duplicates"*)
 
 ### Privacy
-
-- All data stays on your device  
-- No tracking or analytics  
-- No external servers  
-- Clear browser data = data removed (export first)  
+- All data lives on your device — nowhere else
+- No external servers, no tracking, no analytics
+- Clearing your browser data removes your data — export first
 
 ---
 
-## Why I Built This?
+## Changelog
 
-Managing releases across multiple platforms gets messy fast — especially when handling multiple artists or projects.  
+### Bug Fixes
 
-ReleaseTrackerHub exists to bring clarity and structure to that process without forcing you into another account-based system.  
+**Platform Normalization**
+Added `normalizePlatform()` so "Spotify", "SPOTIFY", and "spotify" all map to the same entry. `formatPlatform()` handles proper display casing (Apple Music, YouTube, SoundCloud, etc.). Normalization runs on form submit, inline edit, and CSV import — fixing phantom duplicates in charts and duplicate checks.
 
+**CSV Parsing**
+Replaced the broken `row.split(',')` with PapaParse so titles like *"Song Title, Remix"* now import correctly. Added row filtering to silently skip malformed or empty rows.
 
-## What's New
-What's Changed (Changelog)
-🐛 Bug Fixes
-Platform Normalization
+**Date Input**
+Removed the iOS `::before` pseudo-element hack that broke on Safari. Replaced with a proper `<label for="date">` tied to the input for accessibility.
 
-Added normalizePlatform() — "Spotify", "SPOTIFY", "spotify" all map to the same entry now
-Added formatPlatform() — displays properly cased names (Apple Music, YouTube, SoundCloud etc.)
-Platform is normalized on form submit, inline edit save, and CSV import
-Chart grouping and duplicate checks now use normalized names — no more phantom duplicates
+**ID Generation**
+Upgraded from `Date.now() + Math.random()` to `crypto.randomUUID()` with a fallback for older browsers.
 
-CSV Parsing (Big One)
+---
 
-Replaced the broken row.split(',') with PapaParse — titles like "Song Title, Remix" now import correctly
-Added row filtering to silently skip malformed/empty rows
-Added detailed import feedback: "Imported 5, skipped 2 duplicates"
+### New Features
 
-Date Input
+**Platform Datalist**
+The platform field now suggests 13 common platforms (Spotify, Apple Music, Audiomack, Boomplay, YouTube, YouTube Music, SoundCloud, Tidal, Deezer, Amazon Music, TuneCore, DistroKid, UnitedMasters). Free typing is still allowed — it's a suggestion, not a lock.
 
-Removed the iOS ::before pseudo-element hack that broke on Safari
-Replaced with a proper <label for="date"> tied to the input for accessibility
+**Notes Per Release**
+Every release card has a collapsible notes section, collapsed by default so cards stay clean. A green dot appears on the toggle when a note exists. Notes export and import with CSV.
 
-ID Generation
+---
 
-Upgraded from Date.now() + Math.random() to crypto.randomUUID() with a fallback for older browsers
+### UI Upgrades
 
+**Typography**
+Switched to Inter via Google Fonts. Tighter letter-spacing on headings. Stats bar now shows large bold numbers with small labels — proper dashboard feel.
 
-✨ New Features
-Platform Datalist
+**Cards**
+Subtle green top-border slides in on hover. Spring-physics hover animation (`cubic-bezier(0.34, 1.56, 0.64, 1)`). Card info uses a `label + value` layout.
 
-Platform field now has a <datalist> with 13 common platforms (Spotify, Apple Music, Audiomack, Boomplay, YouTube, YouTube Music, SoundCloud, Tidal, Deezer, Amazon Music, TuneCore, DistroKid, UnitedMasters)
-Free typing still allowed — suggestion only, not locked
+**Form**
+Lives inside a card container with a "New Release" section label. Keyboard shortcut hint displayed with a styled `<kbd>` badge.
 
-Notes Per Release
+**Filters**
+Pill-shaped filter buttons instead of square. Search bar has an embedded SVG icon.
 
-Every release card has a collapsible notes section
-Collapsed by default — cards stay clean
-Green dot indicator on the toggle when a note exists
-"Add note" label changes to "Note" once saved
-Notes export and import with CSV (Notes column added)
+**Toasts**
+Completely redesigned — dark background, green left accent border, slides up from bottom with a spring bounce.
 
+**Shadows & Depth**
+Three-tier shadow system (`--shadow-sm`, `--shadow-md`, `--shadow-lg`) applied consistently across cards, form, chart, and stats.
 
-🎨 UI Upgrade
-Typography
+**Dark Mode**
+Deeper dark background (`#0b0f1a`) and card (`#111827`) — less flat than before.
 
-Switched to Inter via Google Fonts across the whole app
-Tighter letter-spacing on headings (-0.02em to -0.03em)
-Stats bar now shows large bold numbers with small labels underneath — proper dashboard feel
+---
 
-Cards
+### Micro UX
 
-Subtle green top-border line slides in on hover
-Spring-physics hover animation (cubic-bezier(0.34, 1.56, 0.64, 1))
-Card info uses <strong> label + value layout (Artist / Platform / Release Date)
+- **Auto-focus after submit** — cursor jumps back to the Track Title field immediately, no clicking required
+- **Keyboard shortcut** — press `/` from anywhere to focus the form (won't fire if you're already typing)
+- **Confirm before delete** — dialog reminds you that undo is available within 7 seconds
 
-Form
+---
 
-Form now lives inside a card container with a "New Release" section label
-Press / keyboard shortcut hint displayed next to the label with a styled <kbd> badge
+## Why I Built This
 
-Filters
+Managing releases across multiple platforms gets messy fast — especially when handling multiple artists or projects. ReleaseTrackerHub exists to bring clarity and structure to that process, without forcing you into another account-based system.
 
-Pill-shaped filter buttons (border-radius: 999px) instead of square
-Search bar has an embedded SVG search icon via background-image
+---
 
-Toasts
-
-Completely redesigned — dark background, green left accent border
-Slides up from bottom with spring bounce (cubic-bezier keyframe)
-
-Shadows & Depth
-
-Three-tier shadow system: --shadow-sm, --shadow-md, --shadow-lg
-Cards, form, chart, stats all use consistent elevation
-
-Dark Mode
-
-Deeper dark background (#0b0f1a) and card (#111827) — less flat than before
-
-
-⚡ Micro UX
-Auto-focus after submit
-
-Cursor jumps back to Track Title field immediately after adding a release — no clicking required
-
-Keyboard shortcut
-
-Press / from anywhere on the page to jump focus to the form (smart — won't fire if you're already typing in an input or textarea)
-
-Confirm before delete
-
-Dialog: "Delete 'Track Name'? You can undo within 7 seconds." — reminds users undo exists too
-
-**Crafted with ❤️ by Bobbykay**
+Crafted with ❤️ by [Bobbykay](https://lifeofbobbykay.name.ng)
