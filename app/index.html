@@ -1395,7 +1395,7 @@ csvFileInput.onchange=(e)=>{
   reader.readAsText(file);
   csvFileInput.value='';
 };
-
+ 
 //Press "/" anywhere to jump to the form
 document.addEventListener('keydown', (e) => {
   const tag = document.activeElement.tagName.toLowerCase();
@@ -1410,7 +1410,11 @@ document.addEventListener('keydown', (e) => {
 render();
 </script>
 <script>
-if ("serviceWorker" in navigator) {
+if (
+  "serviceWorker" in navigator &&
+  location.hostname !== "localhost" &&
+  location.hostname !== "127.0.0.1"
+) {
   navigator.serviceWorker.register("/app/sw.js")
     .then(() => console.log("Service Worker Registered"))
     .catch(err => console.log("SW failed:", err));
